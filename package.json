@@ -1,0 +1,22 @@
+{
+  "name": "tv_show_bot",
+  "version": "1.0.0",
+  "description": "TV-Show suggets and reminds.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tv-show",
+    "reminder",
+    "suggets"
+  ],
+  "author": "MoC R&D",
+  "license": "ISC",
+  "dependencies": {
+    "botbuilder": "^3.8.4",
+    "dotenv-extended": "^2.0.1",
+    "restify": "^5.0.0",
+    "tvmaze-api": "^0.3.0"
+  }
+}
