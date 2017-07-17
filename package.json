@@ -4,6 +4,8 @@
   "description": "TV-Show suggets and reminds.",
   "main": "app.js",
   "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -18,5 +20,14 @@
     "dotenv-extended": "^2.0.1",
     "restify": "^5.0.0",
     "tvmaze-api": "^0.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.2.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.11.0"
   }
 }
