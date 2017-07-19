@@ -1,7 +1,6 @@
 const dotenv = require('dotenv-extended')
 const builder = require('botbuilder')
 const restify = require('restify')
-const tvmaze = require('tvmaze-api')
 
 // This loads the environment variables from the .env file
 dotenv.load()
@@ -22,54 +21,41 @@ const connector = new builder.ChatConnector({
 })
 server.post('/api/messages', connector.listen())
 
-const bot = new builder.UniversalBot(
-  connector,
+const bot = new builder.UniversalBot(connector, [
   (session) => {
-    const message = 'Sorry, I did not understand \'%s\'. ' +
-                    'Type \'help\' if you need assistance.'
-
-    session.send(message, session.message.text)
+    session.send("You said: '%s'. Try asking for 'help' or say 'goodbye' to quit", session.message.text)
   }
-)
+])
 
 const recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL)
 bot.recognizer(recognizer)
 
-bot.dialog('FindTVShow', [
-  (session, args, _) => {
-    const tvShow =
-      builder.EntityRecognizer.findEntity(args.intent.entities, 'showName')
+require('./dialogs/FindTVShow.js')(bot, builder)
 
-    if (tvShow) {
-      session.sendTyping()
-      tvmaze.getByQuery(tvShow, true, [], (result) => {
-        session.send('I found: %s', result.id)
-      })
-    } else {
-      builder.Prompts.text(session, 'Please enter your TV-Show name')
-    }
-  },
-  (session, result) => {
-    const tvShow = result.response
-
-    session.sendTyping()
-    tvmaze.getByQuery(tvShow, true, [], (result) => {
-      session.send('I found: %s', result.id)
-    })
-  }
-]).triggerAction({
-  matches: 'FindTVShow'
+bot.dialog('Hello', (session) => {
+  session.send('Hi :)')
+  session.beginDialog('FindTVShow')
+}).triggerAction({
+  matches: 'Hello'
 })
 
 bot.dialog('Help', (session) => {
-  const message = 'Hi! Try asking me things like \'search tv-show\', ' +
+  const mes = 'Hi! Try asking me things like \'search tv-show\', ' +
                   '\'tv-show schedule for today\'.'
+  let message =
+    new builder.Message(session)
+               .text(mes)
+               .suggestedActions(
+                 builder.SuggestedActions.create(
+                   session, [
+                     builder.CardAction.imBack(session, 'Find TV-Show', 'Help me find a tv-show')
+                   ]
+                 )
+               )
 
   session.endDialog(message)
 }).triggerAction({
   matches: 'Help'
 })
 
-bot.dialog('default', (session) => {
-  session.endDialog('Try to search tv-show')
-})
+bot.endConversationAction('GoodByeAction', 'Ok... See you later.', { matches: 'GoodByeAction' })
