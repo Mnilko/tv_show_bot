@@ -4,8 +4,6 @@
   "description": "TV-Show suggets and reminds.",
   "main": "app.js",
   "scripts": {
-    "start": "npm run build:live",
-    "build:live": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
