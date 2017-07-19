@@ -1,5 +1,4 @@
 const tvmaze = require('tvmaze-api')
-pry = require('pryjs')
 
 module.exports = function (bot, builder) {
   bot.dialog('FindTVShow', [
